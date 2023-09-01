@@ -1,0 +1,131 @@
+version: "3.6"
+services:
+  youtube-dl:
+    image: nbr23/youtube-dl-server
+    container_name: youtube-dl
+    ports:
+      - 8080:8080
+    volumes:
+      - ${STORAGEDIR}/downloads/youtube:/youtube-dl
+      - ${DOCKERDIR}/youtube-dl/:/config
+    environment:
+      - YDL_CONFIG_PATH=/config/config.yml   
+    restart: unless-stopped
+     
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
+    volumes:
+      - ${DOCKERDIR}/radarr:/config
+      - /etc/localtime:/etc/localtime:ro
+      - ${STORAGEDIR}:/shared
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+    environment:
+      - TZ=${TZ}   
+
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    volumes:
+      - ${DOCKERDIR}/sonarr:/config
+      - /etc/localtime:/etc/localtime:ro
+      - ${STORAGEDIR}:/shared
+    ports:
+        - 8989:8989
+    restart: unless-stopped
+    environment:
+      - TZ=${TZ}
+      
+  lidarr:
+    image: linuxserver/lidarr
+    container_name: lidarr
+    restart: unless-stopped
+    ports:
+      - 8686:8686
+    volumes:
+      - ${DOCKERDIR}/lidarr:/config
+      - /etc/localtime:/etc/localtime:ro
+      - ${STORAGEDIR}:/shared
+    environment:
+      TZ: ${TZ}
+          
+      
+  jackett:
+    image: linuxserver/jackett
+    container_name: jackett
+    volumes:
+      - ${DOCKERDIR}/jackett:/config
+      - ${DOCKERDIR}/jackett/Definitions:/app/Jackett/Definitions/
+      - ${STORAGEDIR}/downloads:/downloads
+      - /etc/localtime:/etc/localtime:ro
+      - ${STORAGEDIR}:/shared
+    ports:
+      - 9117:9117
+    restart: unless-stopped
+    environment:
+      - TZ=${TZ}
+      
+  plex:
+    container_name: plex
+    restart: unless-stopped
+    image: plexinc/pms-docker
+    network_mode: host
+    volumes:
+      - ${DOCKERDIR}/plex:/config
+      - ${FASTSTORAGEDIR}/plex_tmp:/transcode
+      - ${STORAGEDIR}:/shared
+    environment:
+      - TZ=${TZ}
+      - HOSTNAME="Servidor"
+ #   devices:
+ #     - /dev/dri:/dev/dri
+   
+  transmission:
+    image: linuxserver/transmission
+    container_name: transmission
+    environment:
+      - TZ=${TZ}
+      - USER=admin
+      - PASS=${TRANSMISSION_PWD}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/transmission:/config
+      - ${STORAGEDIR}/downloads:/downloads
+      #- ${STORAGEDIR}:/watch
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+    
+
+  navidrome:
+    container_name: navidrome
+    restart: unless-stopped   
+    image: deluan/navidrome:develop
+    ports:
+      - 4533:4533
+    environment:
+      ND_SCANINTERVAL: 0
+      ND_LOGLEVEL: info  
+      ND_SESSIONTIMEOUT: 8760h
+      ND_BASEURL: ""
+      ND_LASTFM_APIKEY: ${LASTFM_APIKEY}
+      ND_LASTFM_SECRET: ${LASTFM_SECRET}
+      ND_SPOTIFY_ID: ${SPOTIFY_ID}
+      ND_SPOTIFY_SECRET: ${SPOTIFY_SECRET}
+    volumes:
+      - ${STORAGEDIR}/music:/music:ro
+      - ${DOCKERDIR}/navidrome:/data 
+      
+  jdownloader-2:
+    container_name: jdownloader-2
+    image: jlesage/jdownloader-2
+    ports:
+      - 5800:5800
+    volumes:
+      - ${DOCKERDIR}/jdownloader-2:/config:rw
+      - ${STORAGEDIR}/downloads/jdownloader:/output:rw   
+      
