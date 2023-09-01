@@ -70,7 +70,7 @@ services:
     restart: unless-stopped
     volumes:
       - ${STORAGEDIR}:/shared   
-      - ${STORAGE_SSDDIR}:/shared_ssd     
+      - ${FASTSTORAGEDIR}:/shared_ssd     
 
 
   homer:
@@ -104,7 +104,7 @@ services:
       - 8081:8080
     volumes:
       - ${STORAGEDIR}:/data/hdd
-      - ${STORAGE_SSDDIR}:/data/ssd
+      - ${FASTSTORAGEDIR}:/data/ssd
       - ${DOCKERDIR}/filebrowser:/config
     environment:
       - FB_BASEURL=/
