@@ -134,6 +134,7 @@ services:
       - SERVER_PORT=8787
       - SERVER_ROOT=/public
       - SERVER_DIRECTORY_LISTING=true
+      - SERVER_DIRECTORY_LISTING_ORDER=0
     volumes:
       - ${DOCKERDIR}/web-receitas/public:/public
     restart: unless-stopped
