@@ -1,0 +1,140 @@
+version: "3.6"
+services:
+  ddclient:
+    image: linuxserver/ddclient
+    container_name: ddclient
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKERDIR}/ddclient:/config
+    restart: unless-stopped
+    
+  wireguard:
+    image: ghcr.io/linuxserver/wireguard
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - TZ=${TZ}
+      - SERVERURL=jmaraujo.duckdns.org
+      - SERVERPORT=51820
+      - PEERS=tlmZe, trabZe, pcZe, tmlMarcia, pcMarcia, outros
+      - PEERDNS=1.1.1.1
+    volumes:
+      - ${DOCKERDIR}/wireguard:/config
+      - /lib/modules:/lib/modules
+    ports:
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv4.ip_forward=1
+    restart: unless-stopped
+
+  pihole:
+    container_name: pihole
+    image: pihole/pihole
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 67:67/udp
+      - 8082:80/tcp
+    environment:
+      - TZ=${TZ}
+
+    volumes:
+      - ${DOCKERDIR}/pihole/etc/pihole/:/etc/pihole/
+      - ${DOCKERDIR}/pihole/etc/dnsmasq.d/:/etc/dnsmasq.d/
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+
+  watchtower:
+    container_name: watchtower
+    restart: unless-stopped
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock   
+    command: --schedule "0 0 4 * * *" --cleanup  
+
+  samba:
+    image: dperson/samba
+    container_name: samba
+    network_mode: host
+    environment:
+      - TZ=${TZ}
+      - NMBD=yes
+      - WORKGROUP=WORKGROUP
+      - SHARE=storage;/shared;yes;no;yes
+      - SHARE2=storage_ssd;/shared_ssd;yes;no;yes       
+    restart: unless-stopped
+    volumes:
+      - ${STORAGEDIR}:/shared   
+      - ${STORAGE_SSDDIR}:/shared_ssd     
+
+
+  homer:
+    image: b4bz/homer
+    container_name: homer
+    volumes:
+      - ${DOCKERDIR}/homer:/www/assets
+    ports:
+      - 80:8080
+    restart: unless-stopped      
+
+  syncthing:
+    image: ghcr.io/linuxserver/syncthing
+    container_name: syncthing
+    hostname: Servidor #optional
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKERDIR}/syncthing/config:/config
+      - ${STORAGEDIR}:/data
+    ports:
+      - 8384:8384
+      - 22000:22000
+      - 21027:21027/udp
+    restart: unless-stopped
+    
+  filebrowser:
+    image: hurlenko/filebrowser
+    container_name: filebrowser
+    ports:
+      - 8081:8080
+    volumes:
+      - ${STORAGEDIR}:/data/hdd
+      - ${STORAGE_SSDDIR}:/data/ssd
+      - ${DOCKERDIR}/filebrowser:/config
+    environment:
+      - FB_BASEURL=/
+      - FB_NOAUTH=true
+    restart: unless-stopped
+    
+  web:
+    image: joseluisq/static-web-server:latest
+    container_name: web
+    ports:
+      - 8787:8787
+    environment:
+      #- SERVER_LOG_LEVEL=5
+      - SERVER_PORT=8787
+      - SERVER_ROOT=/public
+    volumes:
+      - ${DOCKERDIR}/web/public:/public
+    restart: unless-stopped
+    
+  web-receitas:
+    image: joseluisq/static-web-server:latest
+    container_name: web-receitas
+    ports:
+      - 8888:8787
+    environment:
+      #- SERVER_LOG_LEVEL=5
+      - SERVER_PORT=8787
+      - SERVER_ROOT=/public
+      - SERVER_DIRECTORY_LISTING=true
+    volumes:
+      - ${DOCKERDIR}/web-receitas/public:/public
+    restart: unless-stopped
+    
