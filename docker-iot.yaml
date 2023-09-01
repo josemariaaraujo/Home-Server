@@ -8,10 +8,10 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ${DOCKERIOTDIR}/grafana/data:/var/lib/grafana
-      - ${DOCKERIOTDIR}/grafana/provisioning/:/etc/grafana/provisioning
-      - ${DOCKERIOTDIR}/grafana/grafana.ini:/etc/grafana/grafana.ini
-      #- ${DOCKERIOTDIR}/grafana/home:/usr/share/grafana
+      - ${DOCKERDIR}/grafana/data:/var/lib/grafana
+      - ${DOCKERDIR}/grafana/provisioning/:/etc/grafana/provisioning
+      - ${DOCKERDIR}/grafana/grafana.ini:/etc/grafana/grafana.ini
+      #- ${DOCKERDIR}/grafana/home:/usr/share/grafana
   influxdb2:
     image: influxdb:latest
     container_name: influxdb2
@@ -19,13 +19,13 @@ services:
     ports:
       - 8086:8086
     volumes:
-      - ${DOCKERIOTDIR}/influxdb:/var/lib/influxdb
-      - ${DOCKERIOTDIR}/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
-      - ${DOCKERIOTDIR}/influxdb2:/var/lib/influxdb2
-      - ${DOCKERIOTDIR}/influxdb2:/etc/influxdb2
+      - ${DOCKERDIR}/influxdb:/var/lib/influxdb
+      - ${DOCKERDIR}/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+      - ${DOCKERDIR}/influxdb2:/var/lib/influxdb2
+      - ${DOCKERDIR}/influxdb2:/etc/influxdb2
     environment:
       - DOCKER_INFLUXDB_INIT_USERNAME=admin
-      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUX_PWD}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${GENERIC_PASS}
       - DOCKER_INFLUXDB_INIT_ORG=casa
       - DOCKER_INFLUXDB_INIT_BUCKET=iot
   rtl433:
