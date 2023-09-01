@@ -1,0 +1,75 @@
+version: "3.6"
+services:
+  changedetection:
+    image: ghcr.io/dgtlmoon/changedetection.io
+    container_name: changedetection
+    volumes:
+        - ${DOCKERDIR}/changedetection/data:/datastore
+    ports:
+        - 5000:5000
+    restart: unless-stopped
+    depends_on:
+      playwright-chrome:
+        condition: service_started
+    environment:
+        - PLAYWRIGHT_DRIVER_URL=ws://playwright-chrome:3000/?stealth=1&--disable-web-security=true
+  
+  playwright-chrome:
+        image: browserless/chrome
+        restart: unless-stopped
+        environment:
+            - SCREEN_WIDTH=1920
+            - SCREEN_HEIGHT=1024
+            - SCREEN_DEPTH=16
+            - ENABLE_DEBUGGER=false
+            - PREBOOT_CHROME=true
+            - CONNECTION_TIMEOUT=300000
+            - MAX_CONCURRENT_SESSIONS=10
+            - CHROME_REFRESH_TIME=600000
+            # - DEFAULT_BLOCK_ADS=true
+            - DEFAULT_STEALTH=true
+
+  mealie-frontend:
+    image: hkotel/mealie:frontend-nightly
+    container_name: mealie-frontend
+    environment:
+    # Set Frontend ENV Variables Here
+      - API_URL=http://mealie-api:9000  
+    restart: unless-stopped
+    ports:
+      - "9925:3000"  
+    volumes:
+      - ${DOCKERDIR}/mealie-nightly/data/:/app/data/ 
+
+  mealie-api:
+    image: hkotel/mealie:api-nightly
+    container_name: mealie-api
+    volumes:
+      - ${DOCKERDIR}/mealie-nightly/data/:/app/data/
+    #depends_on:
+    #  - postgres
+    environment:
+    # Set Backend ENV Variables Here
+      - ALLOW_SIGNUP=true
+      - TZ=${TZ}
+      - MAX_WORKERS=1
+      - WEB_CONCURRENCY=1
+      #- DB_ENGINE=postgres
+      #- POSTGRES_USER=mealie
+      #- POSTGRES_PASSWORD=mealie
+      #- POSTGRES_SERVER=postgres
+      #- POSTGRES_PORT=5432
+      #- POSTGRES_DB=mealie
+    restart: unless-stopped
+#
+#  postgres:
+#    container_name: postgres
+#    image: postgres
+#    restart: unless-stopped
+#    environment:
+#      POSTGRES_PASSWORD: mealie
+#      POSTGRES_USER: mealie
+#    volumes:
+#      - ${DOCKERDIR}/postgres/data/:/var/lib/postgresql/data
+
+  
