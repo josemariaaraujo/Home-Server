@@ -1,0 +1,41 @@
+version: '3.6'
+services:
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped       
+    ports:
+      - 3000:3000
+    volumes:
+      - ${DOCKERIOTDIR}/grafana/data:/var/lib/grafana
+      - ${DOCKERIOTDIR}/grafana/provisioning/:/etc/grafana/provisioning
+      - ${DOCKERIOTDIR}/grafana/grafana.ini:/etc/grafana/grafana.ini
+      #- ${DOCKERIOTDIR}/grafana/home:/usr/share/grafana
+  influxdb2:
+    image: influxdb:latest
+    container_name: influxdb2
+    restart: unless-stopped
+    ports:
+      - 8086:8086
+    volumes:
+      - ${DOCKERIOTDIR}/influxdb:/var/lib/influxdb
+      - ${DOCKERIOTDIR}/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+      - ${DOCKERIOTDIR}/influxdb2:/var/lib/influxdb2
+      - ${DOCKERIOTDIR}/influxdb2:/etc/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${DOCKERIOTINFLUXPWD}
+      - DOCKER_INFLUXDB_INIT_ORG=casa
+      - DOCKER_INFLUXDB_INIT_BUCKET=iot
+  rtl433:
+    image: hertzg/rtl_433:alpine-master
+    container_name: rtl433
+    restart: unless-stopped    
+    command:
+      - '-drtl_tcp:192.168.1.10:1234'
+ #     - '-Mlevel'
+      - '-R52'
+      - '-Csi'
+      - '-tdigital_agc=1'
+      - '-Finflux://influxdb2:8086/api/v2/write?org=casa&bucket=weather,token=k2mSUsY3Jr-p2hbw_9ywNTle7qjSBLkuR22zlDtjBUfjxg27s4iQsSam0HWxanMsU-OM-EjghZtp8KuxN8kI5g=='
