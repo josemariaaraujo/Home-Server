@@ -88,7 +88,7 @@ services:
     environment:
       - TZ=${TZ}
       - USER=admin
-      - PASS=${TRANSMISSION_PWD}
+      - PASS=${GENERIC_PASS}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/transmission:/config
