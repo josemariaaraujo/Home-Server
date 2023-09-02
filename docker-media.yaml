@@ -101,24 +101,24 @@ services:
     restart: unless-stopped
     
 
-  navidrome:
-    container_name: navidrome
-    restart: unless-stopped   
-    image: deluan/navidrome:develop
-    ports:
-      - 4533:4533
-    environment:
-      ND_SCANINTERVAL: 0
-      ND_LOGLEVEL: info  
-      ND_SESSIONTIMEOUT: 8760h
-      ND_BASEURL: ""
-      ND_LASTFM_APIKEY: ${LASTFM_APIKEY}
-      ND_LASTFM_SECRET: ${LASTFM_SECRET}
-      ND_SPOTIFY_ID: ${SPOTIFY_ID}
-      ND_SPOTIFY_SECRET: ${SPOTIFY_SECRET}
-    volumes:
-      - ${STORAGEDIR}/music:/music:ro
-      - ${DOCKERDIR}/navidrome:/data 
+#  navidrome:
+#    container_name: navidrome
+#    restart: unless-stopped   
+#    image: deluan/navidrome:develop
+#    ports:
+#      - 4533:4533
+#    environment:
+#      ND_SCANINTERVAL: 0
+#      ND_LOGLEVEL: info  
+#      ND_SESSIONTIMEOUT: 8760h
+#      ND_BASEURL: ""
+#      ND_LASTFM_APIKEY: ${LASTFM_APIKEY}
+#      ND_LASTFM_SECRET: ${LASTFM_SECRET}
+#      ND_SPOTIFY_ID: ${SPOTIFY_ID}
+#      ND_SPOTIFY_SECRET: ${SPOTIFY_SECRET}
+#    volumes:
+#      - ${STORAGEDIR}/music:/music:ro
+#      - ${DOCKERDIR}/navidrome:/data 
       
   jdownloader-2:
     container_name: jdownloader-2
