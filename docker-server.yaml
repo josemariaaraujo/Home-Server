@@ -17,7 +17,7 @@ services:
       - SYS_MODULE
     environment:
       - TZ=${TZ}
-      - SERVERURL=jmaraujo.duckdns.org
+      - SERVERURL=ferv.eu
       - SERVERPORT=51820
       - PEERS=tlmZe, trabZe, pcZe, tmlMarcia, pcMarcia, outros
       - PEERDNS=1.1.1.1
