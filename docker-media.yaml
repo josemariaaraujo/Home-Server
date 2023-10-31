@@ -16,7 +16,7 @@ services:
     image: kmb32123/youtube-dl-server
     container_name: youtube-dl-2
     ports:
-      - 8081:8080
+      - 8082:8080
     volumes:
      - ${STORAGEDIR}/downloads/youtube:/youtube-dl
     restart: always
