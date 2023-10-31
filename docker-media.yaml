@@ -1,7 +1,7 @@
 version: "3.6"
 services:
   youtube-dl:
-    image: nbr23/youtube-dl-server
+    image: nbr23/youtube-dl-server:yt-dlp
     container_name: youtube-dl
     ports:
       - 8080:8080
