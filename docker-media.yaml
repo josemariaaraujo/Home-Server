@@ -1,5 +1,20 @@
 version: "3.6"
 services:
+  lazylibrarian:
+    image: linuxserver/lazylibrarian
+    container_name: lazylibrarian
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/lazylibrarian:/config
+      - ${STORAGEDIR}/downloads/lazylibrarian:/downloads
+      - ${STORAGEDIR}/llbooks:/books #optional
+    ports:
+      - 5299:5299
+    environment:
+      - TZ=${TZ}  
+      - DOCKER_MODS=linuxserver/mods:universal-calibre|linuxserver/mods:lazylibrarian-ffmpeg 
+    restart: unless-stopped
+
   prowlarr:
     image: linuxserver/prowlarr
     container_name: prowlarr
