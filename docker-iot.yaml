@@ -39,3 +39,17 @@ services:
       - '-Csi'
       - '-tdigital_agc=1'
       - '-Finflux://influxdb2:8086/api/v2/write?org=casa&bucket=weather,token=k2mSUsY3Jr-p2hbw_9ywNTle7qjSBLkuR22zlDtjBUfjxg27s4iQsSam0HWxanMsU-OM-EjghZtp8KuxN8kI5g=='
+  anisette:
+    image: dadoum/anisette-v3-server
+    container_name: anisette
+    restart: unless-stopped
+    ports: 6969:6969
+    volumes:
+      - ${DOCKERDIR}/anisette:/home/Alcoholic/.config/anisette-v3/lib/
+  macless-haystack:
+    image: christld/macless-haystack
+    container_name: macless-haystack
+    restart: unless-stopped
+    ports: 6176:6176
+    volumes:
+      - ${DOCKERDIR}/macless-haystack:/app/endpoint/data
