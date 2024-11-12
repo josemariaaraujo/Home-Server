@@ -43,13 +43,15 @@ services:
     image: dadoum/anisette-v3-server
     container_name: anisette
     restart: unless-stopped
-    ports: 6969:6969
+    ports: 
+      - 6969:6969
     volumes:
       - ${DOCKERDIR}/anisette:/home/Alcoholic/.config/anisette-v3/lib/
   macless-haystack:
     image: christld/macless-haystack
     container_name: macless-haystack
     restart: unless-stopped
-    ports: 6176:6176
+    ports: 
+      - 6176:6176
     volumes:
       - ${DOCKERDIR}/macless-haystack:/app/endpoint/data
