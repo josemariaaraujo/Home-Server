@@ -138,4 +138,23 @@ services:
     volumes:
       - ${DOCKERDIR}/web-receitas/public:/public
     restart: unless-stopped
-    
+
+  rclone-webdav-server:
+    image: rclone/rclone
+    container_name: rclone-webdav-server
+    ports:
+      - 88:88
+    command:
+      - "serve"
+      - "webdav"
+      - "remote:/data"
+      - "--addr"
+      - "0.0.0.0:88"
+      - "--user"
+      - "webdav"
+      - "--pass"
+      - "webdav"
+    volumes:
+      - ${STORAGEDIR}/webdav:/data
+    restart: unless-stopped
+
