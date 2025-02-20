@@ -147,7 +147,7 @@ services:
     command:
       - "serve"
       - "webdav"
-      - "remote:/data"
+      - "/data"
       - "--addr"
       - "0.0.0.0:88"
       - "--user"
