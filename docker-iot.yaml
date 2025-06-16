@@ -51,8 +51,6 @@ services:
     image: christld/macless-haystack
     container_name: macless-haystack
     restart: unless-stopped
-    stdin_open: true
-    tty: true
     ports: 
       - 6176:6176
     volumes:
