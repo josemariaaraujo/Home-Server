@@ -65,6 +65,7 @@ services:
       - TZ=${TZ}
       - NMBD=yes
       - WORKGROUP=WORKGROUP
+      - USER=admin;admin
       - SHARE=storage;/shared;yes;no;yes
       - SHARE2=storage_ssd;/shared_ssd;yes;no;yes       
     restart: unless-stopped
