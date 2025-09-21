@@ -168,18 +168,6 @@ services:
       - 82:80
     restart: unless-stopped
     
-  homepage:
-    image: ghcr.io/gethomepage/homepage:latest
-    container_name: homepage
-    environment:
-      - HOMEPAGE_ALLOWED_HOSTS=*
-    ports:
-      - 81:3000
-    volumes:
-      - ${DOCKERDIR}/homepage/config:/app/config
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    restart: unless-stopped
-    
   smokeping:
     image: lscr.io/linuxserver/smokeping:latest
     container_name: smokeping
@@ -190,4 +178,16 @@ services:
       - ${DOCKERDIR}/smokeping/data:/data
     ports:
       - 83:80
+    restart: unless-stopped
+    
+  heimdall:
+    image: lscr.io/linuxserver/heimdall:latest
+    container_name: heimdall
+    environment:
+      - TZ=${TZ}    
+    volumes:
+      - ${DOCKERDIR}/heimdall/config:/config
+    ports:
+      - 81:80
+      - 444:443
     restart: unless-stopped
