@@ -172,7 +172,7 @@ services:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
     environment:
-      - HOMEPAGE_ALLOWED_HOSTS="*"
+      - HOMEPAGE_ALLOWED_HOSTS=*
     ports:
       - 81:3000
     volumes:
