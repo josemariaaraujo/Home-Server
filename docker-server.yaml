@@ -41,7 +41,6 @@ services:
       - 8082:80/tcp
     environment:
       - TZ=${TZ}
-
     volumes:
       - ${DOCKERDIR}/pihole/etc/pihole/:/etc/pihole/
       - ${DOCKERDIR}/pihole/etc/dnsmasq.d/:/etc/dnsmasq.d/
@@ -72,7 +71,6 @@ services:
     volumes:
       - ${STORAGEDIR}:/shared   
       - ${FASTSTORAGEDIR}:/shared_ssd     
-
 
   homer:
     image: b4bz/homer
@@ -158,4 +156,38 @@ services:
     volumes:
       - ${STORAGEDIR}/webdav:/data
     restart: unless-stopped
-
+    
+  librespeed:
+    image: lscr.io/linuxserver/librespeed:latest
+    container_name: librespeed
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKERDIR}/librespeed/config:/config
+    ports:
+      - 82:80
+    restart: unless-stopped
+    
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    environment:
+      - HOMEPAGE_ALLOWED_HOSTS: *
+    ports:
+      - 81:3000
+    volumes:
+      - ${DOCKERDIR}/homepage/config:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
+    
+  smokeping:
+    image: lscr.io/linuxserver/smokeping:latest
+    container_name: smokeping
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKERDIR}/smokeping/config:/config
+      - ${DOCKERDIR}/smokeping/data:/data
+    ports:
+      - 83:80
+    restart: unless-stopped
