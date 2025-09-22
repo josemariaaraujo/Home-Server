@@ -31,28 +31,29 @@ services:
       - net.ipv4.ip_forward=1
     restart: unless-stopped
 
-  pihole:
-    container_name: pihole
-    image: pihole/pihole
+#  pihole:
+#    container_name: pihole
+#    image: pihole/pihole
+#    ports:
+#      - 53:53/tcp
+#      - 53:53/udp
+#      - 67:67/udp
+#      - 8082:80/tcp
+#    environment:
+#      - TZ=${TZ}
+#    volumes:
+#      - ${DOCKERDIR}/pihole/etc/pihole/:/etc/pihole/
+#      - ${DOCKERDIR}/pihole/etc/dnsmasq.d/:/etc/dnsmasq.d/
+#    cap_add:
+#      - NET_ADMIN
+#    restart: unless-stopped
+
+  adguardhome:
+    container_name: adguardhome
+    image: adguard/adguardhome
     ports:
       - 53:53/tcp
       - 53:53/udp
-      - 67:67/udp
-      - 8082:80/tcp
-    environment:
-      - TZ=${TZ}
-    volumes:
-      - ${DOCKERDIR}/pihole/etc/pihole/:/etc/pihole/
-      - ${DOCKERDIR}/pihole/etc/dnsmasq.d/:/etc/dnsmasq.d/
-    cap_add:
-      - NET_ADMIN
-    restart: unless-stopped
-
-  adguardhome:
-    image: adguard/adguardhome
-    ports:
-      - 54:53/tcp
-      - 54:53/udp
       - 3001:3000/tcp
     environment:
       - TZ=${TZ}      
