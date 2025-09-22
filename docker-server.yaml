@@ -48,6 +48,19 @@ services:
       - NET_ADMIN
     restart: unless-stopped
 
+  adguardhome:
+    image: adguard/adguardhome
+    ports:
+      - 54:53/tcp
+      - 54:53/udp
+      - 3001:3000/tcp
+    environment:
+      - TZ=${TZ}      
+    volumes:
+      - ${DOCKERDIR}/adguardhome/config:/opt/adguardhome/conf
+      - ${DOCKERDIR}/adguardhome/work:/opt/adguardhome/work
+    restart: unless-stopped      
+
   watchtower:
     container_name: watchtower
     restart: unless-stopped
