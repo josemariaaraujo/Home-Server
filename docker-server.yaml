@@ -86,14 +86,14 @@ services:
       - ${STORAGEDIR}:/shared   
       - ${FASTSTORAGEDIR}:/shared_ssd     
 
-  homer:
-    image: b4bz/homer
-    container_name: homer
-    volumes:
-      - ${DOCKERDIR}/homer:/www/assets
-    ports:
-      - 80:8080
-    restart: unless-stopped      
+#  homer:
+#    image: b4bz/homer
+#    container_name: homer
+#    volumes:
+#      - ${DOCKERDIR}/homer:/www/assets
+#    ports:
+#      - 80:8080
+#    restart: unless-stopped      
 
   syncthing:
     image: ghcr.io/linuxserver/syncthing
@@ -202,6 +202,5 @@ services:
     volumes:
       - ${DOCKERDIR}/heimdall/config:/config
     ports:
-      - 81:80
-      - 444:443
+      - 80:80
     restart: unless-stopped
