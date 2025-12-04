@@ -65,7 +65,7 @@ services:
   watchtower:
     container_name: watchtower
     restart: unless-stopped
-    image: containrrr/watchtower
+    image: ghcr.io/nicholas-fedor/watchtower:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock   
     command: --schedule "0 0 4 * * *" --cleanup  
