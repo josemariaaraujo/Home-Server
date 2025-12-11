@@ -1,10 +1,8 @@
-version: "3.6"
 services:
   lazylibrarian:
     image: linuxserver/lazylibrarian
     container_name: lazylibrarian
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/lazylibrarian:/config
       - ${STORAGEDIR}/downloads/lazylibrarian:/downloads
       - ${STORAGEDIR}/llbooks:/books #optional
@@ -19,7 +17,6 @@ services:
     image: linuxserver/prowlarr
     container_name: prowlarr
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/prowlarr:/config
     ports:
       - 9696:9696
@@ -44,7 +41,6 @@ services:
     container_name: radarr
     volumes:
       - ${DOCKERDIR}/radarr:/config
-      - /etc/localtime:/etc/localtime:ro
       - ${STORAGEDIR}:/shared
     ports:
       - 7878:7878
@@ -57,7 +53,6 @@ services:
     container_name: sonarr
     volumes:
       - ${DOCKERDIR}/sonarr:/config
-      - /etc/localtime:/etc/localtime:ro
       - ${STORAGEDIR}:/shared
     ports:
         - 8989:8989
@@ -73,26 +68,24 @@ services:
       - 8686:8686
     volumes:
       - ${DOCKERDIR}/lidarr:/config
-      - /etc/localtime:/etc/localtime:ro
       - ${STORAGEDIR}:/shared
     environment:
       TZ: ${TZ}
           
       
-  jackett:
-    image: linuxserver/jackett
-    container_name: jackett
-    volumes:
-      - ${DOCKERDIR}/jackett:/config
-      - ${DOCKERDIR}/jackett/Definitions:/app/Jackett/Definitions/
-      - ${STORAGEDIR}/downloads:/downloads
-      - /etc/localtime:/etc/localtime:ro
-      - ${STORAGEDIR}:/shared
-    ports:
-      - 9117:9117
-    restart: unless-stopped
-    environment:
-      - TZ=${TZ}
+#  jackett:
+#    image: linuxserver/jackett
+#    container_name: jackett
+#    volumes:
+#      - ${DOCKERDIR}/jackett:/config
+#      - ${DOCKERDIR}/jackett/Definitions:/app/Jackett/Definitions/
+#      - ${STORAGEDIR}/downloads:/downloads
+#      - ${STORAGEDIR}:/shared
+#    ports:
+#      - 9117:9117
+#    restart: unless-stopped
+#    environment:
+#      - TZ=${TZ}
       
   plex:
     container_name: plex
@@ -108,7 +101,17 @@ services:
       - HOSTNAME="Servidor"
  #   devices:
  #     - /dev/dri:/dev/dri
-   
+  imagemaid:
+    image: kometateam/imagemaid
+    container_name: imagemaid
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKERDIR}/imagemaid:/config
+      - ${DOCKERDIR}/plex:/plex
+    restart: unless-stopped
+
+  
   transmission:
     image: linuxserver/transmission
     container_name: transmission
@@ -117,7 +120,6 @@ services:
       - USER=admin
       - PASS=${GENERIC_PASS}
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/transmission:/config
       - ${STORAGEDIR}/downloads:/downloads
       #- ${STORAGEDIR}:/watch
