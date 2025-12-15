@@ -108,7 +108,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ${DOCKERDIR}/imagemaid:/config
-      - ${DOCKERDIR}/plex:/plex
+      - ${DOCKERDIR}/plex/Library/Application Support/Plex Media Server:/plex
     restart: unless-stopped
 
   
