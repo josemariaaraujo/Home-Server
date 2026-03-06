@@ -81,7 +81,7 @@ services:
       - USER=admin;admin
       - SHARE=storage;/shared;yes;no;yes
       - SHARE2=storage_ssd;/shared_ssd;yes;no;yes       
-      - SHARE2=storage_ext;/shared_ext;yes;no;yes 
+      - SHARE3=storage_ext;/shared_ext;yes;no;yes 
     restart: unless-stopped
     volumes:
       - ${STORAGEDIR}:/shared   
