@@ -96,6 +96,8 @@ services:
       - ${DOCKERDIR}/plex:/config
       - ${FASTSTORAGEDIR}/plex_tmp:/transcode
       - ${STORAGEDIR}:/shared
+    devices:
+      - /dev/dri:/dev/dri
     environment:
       - TZ=${TZ}
       - HOSTNAME="Servidor"
