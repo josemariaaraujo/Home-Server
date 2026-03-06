@@ -99,6 +99,7 @@ services:
     devices:
       - /dev/dri:/dev/dri
     environment:
+      - DEVICE_DRIVER=i915
       - TZ=${TZ}
       - HOSTNAME="Servidor"
  #   devices:
