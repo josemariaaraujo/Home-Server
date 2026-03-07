@@ -17,6 +17,7 @@ services:
     image: influxdb:latest
     container_name: influxdb2
     restart: unless-stopped
+    mem_limit: 256M
     ports:
       - 8086:8086
     volumes:
@@ -27,12 +28,14 @@ services:
       - DOCKER_INFLUXDB_INIT_ORG=casa
       - DOCKER_INFLUXDB_INIT_BUCKET=iot
       # Memory Optimizations via Environment Variables
-      - INFLUXD_STORAGE_SERIES_ID_SET_CACHE_SIZE=100
-      - INFLUXD_STORAGE_CACHE_MAX_MEMORY_SIZE=33554432
-      - INFLUXD_STORAGE_CACHE_SNAPSHOT_MEMORY_SIZE=8388608
-      - INFLUXD_QUERY_MEMORY_BYTES=33554432
-      - INFLUXD_QUERY_CONCURRENCY=1
       - INFLUXD_STORAGE_INDEX_VERSION=tsi1
+      - INFLUXD_STORAGE_CACHE_MAX_MEMORY_SIZE=16777216  # Dropped to 16MB
+      - INFLUXD_STORAGE_CACHE_SNAPSHOT_MEMORY_SIZE=4194304 # Dropped to 4MB
+      - INFLUXD_QUERY_MEMORY_BYTES=33554432 # 32MB for Grafana queries
+      - INFLUXD_QUERY_CONCURRENCY=1
+      - INFLUXD_STORAGE_MAX_CONCURRENT_COMPACTIONS=1
+      - INFLUXD_STORAGE_SERIES_ID_SET_CACHE_SIZE=100
+      
       
   rtl433:
     image: hertzg/rtl_433:master-alpine
