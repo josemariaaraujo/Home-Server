@@ -12,6 +12,7 @@ services:
       - ${DOCKERDIR}/grafana/provisioning/:/etc/grafana/provisioning
       - ${DOCKERDIR}/grafana/grafana.ini:/etc/grafana/grafana.ini
       #- ${DOCKERDIR}/grafana/home:/usr/share/grafana
+      
   influxdb2:
     image: influxdb:latest
     container_name: influxdb2
@@ -19,15 +20,20 @@ services:
     ports:
       - 8086:8086
     volumes:
-      - ${DOCKERDIR}/influxdb:/var/lib/influxdb
-      - ${DOCKERDIR}/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
-      - ${DOCKERDIR}/influxdb2:/var/lib/influxdb2
-      - ${DOCKERDIR}/influxdb2:/etc/influxdb2
+      - ${DOCKERDIR}/influxdb2/data:/var/lib/influxdb2
     environment:
       - DOCKER_INFLUXDB_INIT_USERNAME=admin
       - DOCKER_INFLUXDB_INIT_PASSWORD=${GENERIC_PASS}
       - DOCKER_INFLUXDB_INIT_ORG=casa
       - DOCKER_INFLUXDB_INIT_BUCKET=iot
+    command: 
+      - influxd
+      - --storage-index-version=tsi1
+      - --storage-cache-max-memory-size=33554432
+      - --storage-cache-snapshot-memory-size=8388608
+      - --query-memory-bytes=33554432
+      - --query-concurrency=1
+      
   rtl433:
     image: hertzg/rtl_433:master-alpine
     container_name: rtl433
@@ -39,6 +45,7 @@ services:
       - '-Csi'
       - '-tdigital_agc=1'
       - '-Finflux://influxdb2:8086/api/v2/write?org=casa&bucket=weather,token=k2mSUsY3Jr-p2hbw_9ywNTle7qjSBLkuR22zlDtjBUfjxg27s4iQsSam0HWxanMsU-OM-EjghZtp8KuxN8kI5g=='
+
   anisette:
     image: dadoum/anisette-v3-server
     container_name: anisette
@@ -47,6 +54,7 @@ services:
       - 6969:6969
     volumes:
       - ${DOCKERDIR}/anisette:/home/Alcoholic/.config/anisette-v3/lib/
+
   macless-haystack:
     image: christld/macless-haystack
     container_name: macless-haystack
