@@ -26,13 +26,13 @@ services:
       - DOCKER_INFLUXDB_INIT_PASSWORD=${GENERIC_PASS}
       - DOCKER_INFLUXDB_INIT_ORG=casa
       - DOCKER_INFLUXDB_INIT_BUCKET=iot
-    command: 
-      - influxd
-      - --storage-index-version=tsi1
-      - --storage-cache-max-memory-size=33554432
-      - --storage-cache-snapshot-memory-size=8388608
-      - --query-memory-bytes=33554432
-      - --query-concurrency=1
+      # Memory Optimizations via Environment Variables
+      - INFLUXD_STORAGE_SERIES_ID_SET_CACHE_SIZE=100
+      - INFLUXD_STORAGE_CACHE_MAX_MEMORY_SIZE=33554432
+      - INFLUXD_STORAGE_CACHE_SNAPSHOT_MEMORY_SIZE=8388608
+      - INFLUXD_QUERY_MEMORY_BYTES=33554432
+      - INFLUXD_QUERY_CONCURRENCY=1
+      - INFLUXD_STORAGE_INDEX_VERSION=tsi1
       
   rtl433:
     image: hertzg/rtl_433:master-alpine
