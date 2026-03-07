@@ -17,7 +17,7 @@ services:
     image: influxdb:latest
     container_name: influxdb2
     restart: unless-stopped
-    mem_limit: 256M
+    mem_limit: 512M
     ports:
       - 8086:8086
     volumes:
@@ -35,8 +35,8 @@ services:
       - INFLUXD_QUERY_CONCURRENCY=1
       - INFLUXD_STORAGE_MAX_CONCURRENT_COMPACTIONS=1
       - INFLUXD_STORAGE_SERIES_ID_SET_CACHE_SIZE=100
-      
-      
+      - INFLUXD_STORAGE_SHARD_ID_SET_CACHE_SIZE=100
+
   rtl433:
     image: hertzg/rtl_433:master-alpine
     container_name: rtl433
