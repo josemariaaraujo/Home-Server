@@ -99,15 +99,15 @@ services:
     environment:
       - TZ=${TZ}
       - HOSTNAME="Servidor"
-    devices:
-      - /dev/dri:/dev/dri
+    #devices:  #hw accel only in premium
+    #  - /dev/dri:/dev/dri
  
   imagemaid:
     image: kometateam/imagemaid
     container_name: imagemaid
     environment:
       - TZ=${TZ}
-      - PLEX_URL=http://plex:32400   # Use service name if on same network
+      - PLEX_URL=http://192.168.1.1:32400   # Use service name if on same network
       - PLEX_TOKEN=QzzMzZzkeWUTUp_3TZpr
     volumes:
       - ${DOCKERDIR}/imagemaid:/config
