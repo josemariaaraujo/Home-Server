@@ -121,6 +121,7 @@ services:
     volumes:
       - ${STORAGEDIR}:/data/hdd
       - ${FASTSTORAGEDIR}:/data/ssd
+      - ${EXTSTORAGEDIR}:/data/ext
       - ${DOCKERDIR}/filebrowser:/config
     environment:
       - FB_BASEURL=/
