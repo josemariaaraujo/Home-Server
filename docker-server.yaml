@@ -82,7 +82,9 @@ services:
       - SHARE=storage;/shared;yes;no;yes
       - SHARE2=storage_ssd;/shared_ssd;yes;no;yes       
       - SHARE3=storage_ext;/shared_ext;yes;no;yes 
-      - GLOBAL=client min protocol = NT1;server min protocol = NT1;ntlm auth = yes
+      - GLOBAL=server min protocol = NT1
+      - GLOBAL2=client min protocol = NT1
+      - GLOBAL3=ntlm auth = yes
     restart: unless-stopped
     volumes:
       - ${STORAGEDIR}:/shared   
