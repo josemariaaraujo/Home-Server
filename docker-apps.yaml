@@ -1,5 +1,17 @@
-version: "3.6"
 services:
+  chromium:
+    image: lscr.io/linuxserver/chromium:latest
+    container_name: remote_chromium
+    restart: unless-stopped 
+    mem_limit: 2G
+    ports:
+      - "3333:3001" # HTTP Web UI
+    volumes:
+      - ${DOCKERDIR}/chromium:/config
+    security_opt:
+      - seccomp:unconfined 
+    shm_size: 1G
+    
   changedetection:
     image: ghcr.io/dgtlmoon/changedetection.io
     container_name: changedetection
@@ -61,15 +73,5 @@ services:
       #- POSTGRES_PORT=5432
       #- POSTGRES_DB=mealie
     restart: unless-stopped
-#
-#  postgres:
-#    container_name: postgres
-#    image: postgres
-#    restart: unless-stopped
-#    environment:
-#      POSTGRES_PASSWORD: mealie
-#      POSTGRES_USER: mealie
-#    volumes:
-#      - ${DOCKERDIR}/postgres/data/:/var/lib/postgresql/data
 
   
